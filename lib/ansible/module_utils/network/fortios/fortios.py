@@ -125,10 +125,12 @@ class FortiOSHandler(object):
 
     def get_mkeyname(self, path, name, vdom=None):
         schema = self.schema(path, name, vdom=vdom)
-        try:
+        
+        keyname = None
+        if 'mkey' in schema:
             keyname = schema['mkey']
-        except KeyError:
-            return False
+        elif 'results' in schema and 'mkey' in schema['results']:
+            keyname = schema['results']['mkey']
         return keyname
 
     def get_mkey(self, path, name, data, vdom=None):
